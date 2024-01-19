@@ -60,15 +60,15 @@ const urlOptions = computed(async () => {
 })
 
 
-const numberUrl = async () => {
-  if (number.value <= 0) {
-    url.value = `https://fakestoreapi.com/products?limit=10`
-    await getData(url.value)
+const numberUrl = computed(async () => {
+  const urlLimit = `https://fakestoreapi.com/products?limit=${number.value}`
+  const urlFilled = "https://fakestoreapi.com/products"
+  if (number.value > 0 ) {
+    await getData(urlLimit);
   } else {
-    url.value = `https://fakestoreapi.com/products?limit=${number.value}`
-    await getData(url.value)
+    await getData(urlFilled);
   }
-}
+})
 
 
 onBeforeMount(async () => {
@@ -79,7 +79,7 @@ onBeforeMount(async () => {
 
 <template>
   <q-page class="q-pa-xl text-center">
-    <q-input type="number" outlined v-model="number" @click="numberUrl()">
+    <q-input type="number" min="0" outlined v-model="number" @click="numberUrl">
       <q-icon name="pin" />
     </q-input>
     <q-select class="q-mt-md" outlined v-model="option" :options="options" @click="urlOptions"
